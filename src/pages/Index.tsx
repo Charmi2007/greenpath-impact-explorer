@@ -1,49 +1,67 @@
 import { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { careers, type Sector, type ImpactLevel, type SkillCategory } from "@/data/careers";
+import Navbar from "@/components/Navbar";
 import HeroHeader from "@/components/dashboard/HeroHeader";
 import KPICards from "@/components/dashboard/KPICards";
-import FilterPanel from "@/components/dashboard/FilterPanel";
 import ChartsSection from "@/components/dashboard/ChartsSection";
-import CareerTable from "@/components/dashboard/CareerTable";
-import WhatIfSimulation from "@/components/dashboard/WhatIfSimulation";
-import CaseStudies from "@/components/dashboard/CaseStudies";
-import InsightPanel from "@/components/dashboard/InsightPanel";
 import Footer from "@/components/dashboard/Footer";
+import { ArrowRight, BookOpen, Briefcase, Sparkles } from "lucide-react";
+
+const QuickLinkCard = ({ title, description, icon: Icon, to, delay }: {
+  title: string; description: string; icon: React.ElementType; to: string; delay: number;
+}) => (
+  <Link
+    to={to}
+    className="group rounded-xl bg-card p-6 shadow-card transition-all duration-300 hover:shadow-elevated hover:-translate-y-1 hover:border-primary/30 border border-transparent"
+    style={{ animationDelay: `${delay}ms` }}
+  >
+    <div className="flex items-center justify-between">
+      <div className="rounded-lg bg-primary/10 p-2.5">
+        <Icon className="h-5 w-5 text-primary" />
+      </div>
+      <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary" />
+    </div>
+    <h3 className="mt-4 font-display text-lg font-bold text-foreground group-hover:text-primary transition-colors">{title}</h3>
+    <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+  </Link>
+);
 
 const Index = () => {
-  const [selectedSectors, setSelectedSectors] = useState<Sector[]>([]);
-  const [selectedImpact, setSelectedImpact] = useState<ImpactLevel[]>([]);
-  const [selectedSkills, setSelectedSkills] = useState<SkillCategory[]>([]);
-
-  const filteredCareers = useMemo(() => {
-    return careers.filter(c => {
-      if (selectedSectors.length && !selectedSectors.includes(c.sector)) return false;
-      if (selectedImpact.length && !selectedImpact.includes(c.impactLevel)) return false;
-      if (selectedSkills.length && !selectedSkills.some(s => c.skillCategories.includes(s))) return false;
-      return true;
-    });
-  }, [selectedSectors, selectedImpact, selectedSkills]);
+  const filteredCareers = careers;
 
   return (
     <div className="min-h-screen bg-background">
+      <Navbar />
       <HeroHeader />
       <main className="mx-auto max-w-6xl space-y-8 px-6 py-10">
         <KPICards filteredCareers={filteredCareers} />
-        <FilterPanel
-          selectedSectors={selectedSectors}
-          selectedImpact={selectedImpact}
-          selectedSkills={selectedSkills}
-          onSectorsChange={setSelectedSectors}
-          onImpactChange={setSelectedImpact}
-          onSkillsChange={setSelectedSkills}
-        />
         <ChartsSection filteredCareers={filteredCareers} />
-        <CareerTable careers={filteredCareers} />
-        <div className="grid gap-6 lg:grid-cols-2">
-          <WhatIfSimulation />
-          <InsightPanel filteredCareers={filteredCareers} />
+
+        {/* Quick navigation cards */}
+        <div className="grid gap-6 sm:grid-cols-3">
+          <QuickLinkCard
+            title="Career Directory"
+            description="Browse all 30 green careers with filters, sorting, and detailed profiles."
+            icon={Briefcase}
+            to="/careers"
+            delay={0}
+          />
+          <QuickLinkCard
+            title="Case Studies"
+            description="Explore real-world projects making a measurable climate impact."
+            icon={BookOpen}
+            to="/case-studies"
+            delay={100}
+          />
+          <QuickLinkCard
+            title="Impact Simulator"
+            description="Calculate your potential CO₂ reduction over a full career timeline."
+            icon={Sparkles}
+            to="/simulator"
+            delay={200}
+          />
         </div>
-        <CaseStudies />
       </main>
       <Footer />
     </div>
