@@ -7,6 +7,8 @@ import Index from "./pages/Index.tsx";
 import CareersPage from "./pages/CareersPage.tsx";
 import CaseStudiesPage from "./pages/CaseStudiesPage.tsx";
 import SimulatorPage from "./pages/SimulatorPage.tsx";
+import CareerPathPage from "./pages/CareerPathPage.tsx";
+import FeedbackPage from "./pages/FeedbackPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
