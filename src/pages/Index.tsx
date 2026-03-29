@@ -6,7 +6,7 @@ import HeroHeader from "@/components/dashboard/HeroHeader";
 import KPICards from "@/components/dashboard/KPICards";
 import ChartsSection from "@/components/dashboard/ChartsSection";
 import Footer from "@/components/dashboard/Footer";
-import { ArrowRight, BookOpen, Briefcase, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, Briefcase, Sparkles, Route, MessageSquare } from "lucide-react";
 
 const QuickLinkCard = ({ title, description, icon: Icon, to, delay }: {
   title: string; description: string; icon: React.ElementType; to: string; delay: number;
