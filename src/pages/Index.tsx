@@ -6,7 +6,7 @@ import HeroHeader from "@/components/dashboard/HeroHeader";
 import KPICards from "@/components/dashboard/KPICards";
 import ChartsSection from "@/components/dashboard/ChartsSection";
 import Footer from "@/components/dashboard/Footer";
-import { ArrowRight, BookOpen, Briefcase, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, Briefcase, Sparkles, Route, MessageSquare } from "lucide-react";
 
 const QuickLinkCard = ({ title, description, icon: Icon, to, delay }: {
   title: string; description: string; icon: React.ElementType; to: string; delay: number;
@@ -39,28 +39,12 @@ const Index = () => {
         <ChartsSection filteredCareers={filteredCareers} />
 
         {/* Quick navigation cards */}
-        <div className="grid gap-6 sm:grid-cols-3">
-          <QuickLinkCard
-            title="Career Directory"
-            description="Browse all 30 green careers with filters, sorting, and detailed profiles."
-            icon={Briefcase}
-            to="/careers"
-            delay={0}
-          />
-          <QuickLinkCard
-            title="Case Studies"
-            description="Explore real-world projects making a measurable climate impact."
-            icon={BookOpen}
-            to="/case-studies"
-            delay={100}
-          />
-          <QuickLinkCard
-            title="Impact Simulator"
-            description="Calculate your potential CO₂ reduction over a full career timeline."
-            icon={Sparkles}
-            to="/simulator"
-            delay={200}
-          />
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <QuickLinkCard title="Career Directory" description="Browse 30 green careers with filters, sorting, and detailed profiles." icon={Briefcase} to="/careers" delay={0} />
+          <QuickLinkCard title="Career Paths" description="Match your skills to green careers and discover upskilling opportunities." icon={Route} to="/career-paths" delay={100} />
+          <QuickLinkCard title="Case Studies" description="Explore real-world projects making a measurable climate impact." icon={BookOpen} to="/case-studies" delay={200} />
+          <QuickLinkCard title="Impact Simulator" description="Calculate your potential CO₂ reduction over a full career timeline." icon={Sparkles} to="/simulator" delay={300} />
+          <QuickLinkCard title="Feedback" description="Rate features, suggest careers, and help us improve GreenPath." icon={MessageSquare} to="/feedback" delay={400} />
         </div>
       </main>
       <Footer />

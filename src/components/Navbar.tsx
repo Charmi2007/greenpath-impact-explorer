@@ -5,8 +5,10 @@ import { Leaf, Menu, X } from "lucide-react";
 const navItems = [
   { label: "Dashboard", path: "/" },
   { label: "Careers", path: "/careers" },
+  { label: "Career Paths", path: "/career-paths" },
   { label: "Case Studies", path: "/case-studies" },
   { label: "Simulator", path: "/simulator" },
+  { label: "Feedback", path: "/feedback" },
 ];
 
 const Navbar = () => {
