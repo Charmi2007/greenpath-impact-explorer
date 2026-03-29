@@ -1,8 +1,9 @@
 import { useState } from "react";
 import type { Career, ImpactLevel } from "@/data/careers";
-import { sectorIcons } from "@/data/careers";
+import { sectorIcons, sdgInfo } from "@/data/careers";
 import { useAnimateOnScroll } from "@/hooks/useAnimateOnScroll";
-import { ChevronDown, ExternalLink } from "lucide-react";
+import { ChevronDown, ExternalLink, GraduationCap, Award } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const impactBadge = (level: ImpactLevel) => {
   const styles: Record<ImpactLevel, string> = {
@@ -47,17 +48,50 @@ const CareerRow = ({ career, index }: { career: Career; index: number }) => {
         </td>
         <td className="py-3 pr-4">{impactBadge(career.impactLevel)}</td>
         <td className="py-3 pr-4 font-semibold text-foreground">{career.co2TonsSaved}t</td>
-        <td className="py-3 text-xs text-muted-foreground">{career.caseStudy}</td>
+        <td className="py-3 pr-4">
+          <div className="flex gap-1">
+            {career.sdgs.slice(0, 3).map(sdg => (
+              <Tooltip key={sdg}>
+                <TooltipTrigger>
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold bg-secondary text-secondary-foreground cursor-help transition-transform hover:scale-125">
+                    {sdg}
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="font-semibold text-xs">SDG {sdg}: {sdgInfo[sdg].title}</p>
+                </TooltipContent>
+              </Tooltip>
+            ))}
+          </div>
+        </td>
       </tr>
       {expanded && (
         <tr className="animate-fade-in">
           <td colSpan={6} className="px-4 pb-4">
             <div className="rounded-lg bg-secondary/40 p-4 border-l-4 border-primary">
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-3">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Case Study</p>
-                  <p className="text-sm font-semibold text-foreground">{career.caseStudy}</p>
-                  <p className="mt-1 text-sm text-foreground leading-relaxed">{career.caseStudyDesc}</p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Responsibilities</p>
+                  <ul className="space-y-1">
+                    {career.responsibilities.map((r, i) => (
+                      <li key={i} className="flex items-start gap-1.5 text-sm text-foreground">
+                        <span className="text-primary">•</span>{r}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                    <GraduationCap className="inline h-3 w-3 mr-1" />Education & Certifications
+                  </p>
+                  <div className="space-y-1 text-sm">
+                    {career.education.map((e, i) => (
+                      <p key={i} className="text-foreground">📚 {e}</p>
+                    ))}
+                    {career.certifications.map((c, i) => (
+                      <p key={i} className="text-foreground"><Award className="inline h-3 w-3 mr-1 text-warning" />{c}</p>
+                    ))}
+                  </div>
                 </div>
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Career Details</p>
@@ -65,9 +99,24 @@ const CareerRow = ({ career, index }: { career: Career; index: number }) => {
                     <p><span className="text-muted-foreground">Salary:</span> <strong className="text-foreground">{career.avgSalary}</strong></p>
                     <p><span className="text-muted-foreground">Growth:</span> <strong className="text-foreground">{career.growthIndex}</strong></p>
                     <p><span className="text-muted-foreground">Source:</span> <span className="text-primary">{career.source}</span></p>
-                    <p className="text-muted-foreground">All skills: {career.skills.join(", ")}</p>
+                    <p className="text-muted-foreground">Skills: {career.skills.join(", ")}</p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Upskill</p>
+                    <div className="flex flex-wrap gap-1">
+                      {career.upskillLinks.map((l, i) => (
+                        <a key={i} href={l.url} target="_blank" rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 rounded bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary hover:bg-primary hover:text-primary-foreground transition-colors">
+                          {l.title} <ExternalLink className="h-2.5 w-2.5" />
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 </div>
+              </div>
+              <div className="mt-3 pt-3 border-t border-border">
+                <p className="text-xs font-semibold text-muted-foreground">Case Study: <span className="text-foreground">{career.caseStudy}</span></p>
+                <p className="mt-1 text-sm text-foreground leading-relaxed">{career.caseStudyDesc}</p>
               </div>
             </div>
           </td>
@@ -117,7 +166,7 @@ const CareerTable = ({ careers }: { careers: Career[] }) => {
               <th className="pb-3 pr-4 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort("co2TonsSaved")}>
                 CO₂ Saved {sortKey === "co2TonsSaved" && (sortAsc ? "↑" : "↓")}
               </th>
-              <th className="pb-3">Case Study</th>
+              <th className="pb-3">SDGs</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
